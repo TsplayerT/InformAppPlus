@@ -1,0 +1,85 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InformAppPlus.Controle.Pagina.VerNotificacoes">
+
+    <NavigationPage.TitleView>
+        <Label
+            Text="Ver notificações              "
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="White"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand" />
+    </NavigationPage.TitleView>
+
+    <ContentPage.Content>
+        <StackLayout
+            Margin="10, 10, 10, 10"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+
+            <StackLayout
+                IsVisible="{Binding Carregando}"
+                Orientation="Horizontal"
+                HorizontalOptions="CenterAndExpand">
+
+                <ActivityIndicator
+                    IsVisible="{Binding Carregando}"
+                    IsRunning="{Binding Carregando}"
+                    Color="#646464"
+                    HeightRequest="20"
+                    WidthRequest="20">
+                </ActivityIndicator>
+                <Label
+                    IsVisible="{Binding Carregando}"
+                    Text="Carregando..."
+                    TextColor="Black"
+                    VerticalOptions="Center">
+                </Label>
+            </StackLayout>
+
+            <ScrollView
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+
+                <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    BindableLayout.ItemsSource="{Binding ListaNotificacao}">
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                CornerRadius="10"
+                                BackgroundColor="LightGray">
+
+                                <FlexLayout
+                                    Direction="Column"
+                                    HorizontalOptions="FillAndExpand">
+
+                                    <Label
+                                        Text="{Binding Titulo.Ingles, StringFormat='Titulo: {0}', FallbackValue='Titulo: sem valor', TargetNullValue='Titulo: sem valor'}"
+                                        BindingContext="{Binding .}">
+                                    </Label>
+                                    <Label
+                                        Text="{Binding Mensagem.Ingles, StringFormat='Mensagem: {0}', FallbackValue='Mensagem: sem valor', TargetNullValue='Mensagem: sem valor'}"
+                                        BindingContext="{Binding .}">
+                                    </Label>
+                                    <Label
+                                        Text="{Binding DataHoraAgendado, StringFormat='Data Agendada: {0}', FallbackValue='Data Agendada: sem valor', TargetNullValue='Data Agendada: sem valor'}"
+                                        BindingContext="{Binding .}">
+                                    </Label>
+                                    <Label
+                                        Text="{Binding Prioridade, StringFormat='Prioridade: {0}', FallbackValue='Prioridade: sem valor', TargetNullValue='Prioridade: sem valor'}"
+                                        BindingContext="{Binding .}">
+                                    </Label>
+                                </FlexLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

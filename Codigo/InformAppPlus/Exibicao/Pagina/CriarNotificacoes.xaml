@@ -1,0 +1,137 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InformAppPlus.Controle.Pagina.CriarNotificacoes">
+
+    <NavigationPage.TitleView>
+        <Label
+            Text="Criar notificações            "
+            FontSize="20"
+            FontAttributes="Bold"
+            TextColor="White"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand" />
+    </NavigationPage.TitleView>
+
+    <StackLayout
+        Margin="10, 10, 10, 10"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+
+        <Frame
+            Padding="10"
+            BackgroundColor="#e1e1e1"
+            CornerRadius="10">
+
+            <FlexLayout
+                Direction="Column">
+
+                <Label
+                    Text="Titulo">
+                </Label>
+                <Entry
+                    Text="{Binding TextoTitulo}"
+                    HorizontalOptions="FillAndExpand">
+                </Entry>
+            </FlexLayout>
+        </Frame>
+
+        <Frame
+            Padding="10"
+            BackgroundColor="#e1e1e1"
+            CornerRadius="10">
+
+            <FlexLayout
+                Direction="Column">
+
+                <Label
+                    Text="Mensagem">
+                </Label>
+                <Editor
+                    Text="{Binding TextoMensagem}"
+                    HeightRequest="120"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand">
+                </Editor>
+            </FlexLayout>
+        </Frame>
+
+        <FlexLayout
+            Direction="Row">
+
+            <Frame
+                Padding="10"
+                BackgroundColor="#e1e1e1"
+                CornerRadius="10">
+
+                <FlexLayout
+                    Direction="Column">
+
+                    <Label
+                        Text="Agendar">
+                    </Label>
+                    <DatePicker
+                        Date="{Binding DataAgendada}"
+                        MinimumDate="{Binding DataAgendada}"
+                        Unfocused="DataHora_OnUnfocused">
+                    </DatePicker>
+                    <TimePicker
+                        Time="{Binding HoraAgendada}"
+                        Format="HH:mm"
+                        Unfocused="DataHora_OnUnfocused">
+                    </TimePicker>
+                </FlexLayout>
+            </Frame>
+            <Frame
+                Margin="6, 0, 0, 0"
+                Padding="10"
+                BackgroundColor="#e1e1e1"
+                CornerRadius="10">
+
+                <FlexLayout
+                    Direction="Column">
+
+                    <Label
+                        Text="Prioridade">
+                    </Label>
+
+                    <StackLayout
+                        Orientation="Horizontal">
+
+                        <Button
+                            Text="-"
+                            FontSize="24"
+                            WidthRequest="70"
+                            IsEnabled="{Binding BotaoSubtrairHabilitado}"
+                            Clicked="BotaoSubtrair_OnClicked">
+                        </Button>
+                        <Entry
+                            Text="{Binding Prioridade, StringFormat='{0:D2}'}"
+                            Keyboard="Numeric"
+                            VerticalTextAlignment="Center"
+                            HorizontalOptions="CenterAndExpand"
+                            Unfocused="Prioridade_OnUnfocused">
+                        </Entry>
+                        <Button
+                            Text="+"
+                            FontSize="18"
+                            WidthRequest="70"
+                            IsEnabled="{Binding BotaoSomarHabilitado}"
+                            Clicked="BotaoSomar_OnClicked">
+                        </Button>
+                    </StackLayout>
+                </FlexLayout>
+            </Frame>
+        </FlexLayout>
+
+        <Button
+            Margin="0, 20, 0, 0"
+            Text="Enviar"
+            CornerRadius="30"
+            WidthRequest="150"
+            BackgroundColor="#9696ff"
+            IsEnabled="{Binding BotaoEnviarHabilitado}"
+            HorizontalOptions="Center"
+            Clicked="Button_OnClicked">
+        </Button>
+    </StackLayout>
+</ContentPage>

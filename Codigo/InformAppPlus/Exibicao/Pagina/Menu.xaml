@@ -1,0 +1,45 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:utilidade="clr-namespace:InformAppPlus.Utilidade"
+             x:Class="InformAppPlus.Controle.Pagina.Menu">
+
+    <NavigationPage.TitleView>
+        <Image
+            Margin="0, -27, 0, 0"
+            Scale="0.5"
+            Source="{x:Static utilidade:Constantes.LogoImagemSource}"/>
+    </NavigationPage.TitleView>
+
+    <ContentPage.Content>
+        <StackLayout
+            Margin="10, 10, 10, 10"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+
+            <Frame
+                CornerRadius="10"
+                BackgroundColor="LightGray"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Center">
+
+                <StackLayout
+                    BackgroundColor="LightGray">
+
+                    <Button
+                        CornerRadius="10"
+                        Text="Ver notificações"
+                        BackgroundColor="LightGreen"
+                        Clicked="BotaoVerNotificacoes_OnClicked">
+                    </Button>
+                    <Button
+                        CornerRadius="10"
+                        Text="Criar notificação"
+                        BackgroundColor="LightBlue"
+                        Clicked="BotaoCriarNotificacao_OnClicked">
+                    </Button>
+                </StackLayout>
+            </Frame>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
