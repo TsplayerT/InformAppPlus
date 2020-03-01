@@ -2,4 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InformAppPlus.Controle.Principal">
 
+    <Application.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Frame">
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="BackgroundColor" Value="#e1e1e1" />
+            </Style>
+			
+			<Style TargetType="Label">
+				<Style.Triggers>
+                    <DataTrigger TargetType="Label"  Binding="{Binding FormattedTextProperty}" Value="{x:Null}">
+					   <Setter Property="TextColor" Value="Black" />
+					</DataTrigger>
+				 </Style.Triggers>
+			</Style>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

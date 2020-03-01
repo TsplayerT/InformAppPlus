@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace InformAppPlus
+namespace InformAppPlus.Servico
 {
     public class Requisicao
     {
@@ -22,6 +22,12 @@ namespace InformAppPlus
         public int? Prioridade { get; set; }
         [JsonProperty("send_after")]
         public DateTime? DataAgendada { get; set; }
+        [JsonProperty("url")]
+        public string Url{ get; set; }
+        [JsonProperty("big_picture")]
+        public string UrlImagem{ get; set; }
+        [JsonProperty("android_channel_id")]
+        public string CategoriaId { get; set; }
 
         public enum TipoLinguagem
         {

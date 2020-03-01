@@ -9,6 +9,13 @@ namespace InformAppPlus.Utilidade
     {
         public static string AppId => "065fc6dd-75b5-4b07-84e6-98ad139aec9b";
         public static string RestApiId => "NmUwMmI4MGItYmQ1YS00ZjkyLWEyZDEtZjBlZWQ3MGVhNGUw";
+        public static string ClientId => "82e55a7b69d639f";
+
+        public static string TextoBotaoEscolherImagem => "Escolher Imagem";
+        public static string TextoBotaoRemoverImagem => "Remover Imagem";
+        
+        public static Color CorBotaoSemImagem => Color.FromHex("#64fa64");
+        public static Color CorBotaoComImagem => Color.FromHex("#fa6464");
 
         public static ImageSource LogoImagemSource => ImageSource.FromResource("InformAppPlus.Recurso.Imagem.logo.png", typeof(Constantes).GetTypeInfo().Assembly);
 
@@ -26,5 +33,6 @@ namespace InformAppPlus.Utilidade
             { TipoPagina.CriarNotificacoes, new CriarNotificacoes() },
             { TipoPagina.VerNotificacoes, new VerNotificacoes() }
         };
+
     }
 }

@@ -1,94 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using InformAppPlus.Controle;
 using InformAppPlus.Modelo;
 using InformAppPlus.Utilidade;
 using Newtonsoft.Json;
+using Xamarin.Forms;
 
 namespace InformAppPlus.Servico
 {
     public static class Conexao
     {
-        private static HttpClient Cliente { get; }
-        public static string CaminhoConexao => "https://onesignal.com/api/v1/";
+        private static HttpClient ClienteImagem { get; }
+        private static HttpClient ClienteNotificacao { get; }
+        public static string CaminhoConexaoImagem => "https://api.imgur.com/3/";
+        public static string CaminhoConexaoNotificacao => "https://onesignal.com/api/v1/";
 
         static Conexao()
         {
-            Cliente = new HttpClient
+            ClienteImagem = new HttpClient
             {
-                BaseAddress = new Uri(CaminhoConexao)
+                BaseAddress = new Uri(CaminhoConexaoImagem)
+            };
+            ClienteNotificacao = new HttpClient
+            {
+                BaseAddress = new Uri(CaminhoConexaoNotificacao)
             };
 
-            Cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Constantes.RestApiId);
+            ClienteImagem.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-Id", Constantes.ClientId);
+            ClienteNotificacao.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Constantes.RestApiId);
         }
 
-        public static async Task<string> CriarNotificacaoAsync(string titulo, string mensagem, DateTime data = default, TimeSpan hora = default, int prioridade = default)
+        public static async Task<Tuple<HttpStatusCode, string>> CriarNotificacaoAsync(Requisicao parametro)
         {
-            var parametro = new Requisicao
-            {
-                AppId = Constantes.AppId,
-                Titulo = new Dictionary<Requisicao.TipoLinguagem, string>
-                {
-                    { Requisicao.TipoLinguagem.Ingles, titulo }
-                },
-                Subtitulo = new Dictionary<Requisicao.TipoLinguagem, string>
-                {
-                    { Requisicao.TipoLinguagem.Ingles, "subtexto" }
-                },
-                Mensagem = new Dictionary<Requisicao.TipoLinguagem, string>
-                {
-                    { Requisicao.TipoLinguagem.Ingles, mensagem }
-                },
-                Segmentos = new List<string>
-                {
-                    "All"
-                }
-            };
-
-            if (data == default && hora == default)
-            {
-                parametro.DataAgendada = DateTime.Now;
-            }
-            else if (data == default && hora != default)
-            {
-                parametro.DataAgendada = Convert.ToDateTime(DateTime.Now.Date.Add(hora));
-            }
-            else if (data != default && hora == default)
-            {
-                parametro.DataAgendada = data.Date.Add(DateTime.Now.TimeOfDay);
-            }
-            else
-            {
-                parametro.DataAgendada = data.Date.Add(hora);
-            }
-
-            if (prioridade > 10)
-            {
-                parametro.Prioridade = 10;
-            }
-            else if (prioridade < 0)
-            {
-                parametro.Prioridade = 0;
-            }
-            else
-            {
-                parametro.Prioridade = prioridade;
-            }
+            parametro.AppId = Constantes.AppId;
 
             var parametroJson = JsonConvert.SerializeObject(parametro);
             var parametroString = new StringContent(parametroJson, Encoding.UTF8, "application/json");
 
             try
             {
-                var resposta = await Cliente.PostAsync("notifications", parametroString).ConfigureAwait(false);
+                var resposta = await ClienteNotificacao.PostAsync("notifications", parametroString).ConfigureAwait(false);
                 var conteudo = await resposta.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                return resposta.IsSuccessStatusCode ? conteudo : Requisicao.MensagemErroTratado(conteudo);
+                return new Tuple<HttpStatusCode, string>(resposta.StatusCode, resposta.IsSuccessStatusCode ? conteudo : Requisicao.MensagemErroTratado(conteudo));
             }
             catch (Exception ex)
             {
@@ -98,22 +58,22 @@ namespace InformAppPlus.Servico
                 }
             }
 
-            return string.Empty;
+            return default;
         }
 
-        public static async Task<ListaNotificacao> VerNotificacoesAsync(CancellationToken tokenCancelamento = default)
+        public static async Task<Tuple<HttpStatusCode, ListaNotificacao>> VerNotificacoesAsync(CancellationToken tokenCancelamento = default)
         {
             try
             {
-                var resposta = await Cliente.GetAsync($"notifications?app_id={Constantes.AppId}&limit={50}", tokenCancelamento).ConfigureAwait(false);
+                var resposta = await ClienteNotificacao.GetAsync($"notifications?app_id={Constantes.AppId}&limit={50}", tokenCancelamento).ConfigureAwait(false);
                 var conteudo = await resposta.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 if (resposta.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<ListaNotificacao>(conteudo);
+                    return new Tuple<HttpStatusCode, ListaNotificacao>(resposta.StatusCode, JsonConvert.DeserializeObject<ListaNotificacao>(conteudo));
                 }
 
-                await Principal.Mensagem(Requisicao.MensagemErroTratado(conteudo));
+                return new Tuple<HttpStatusCode, ListaNotificacao>(resposta.StatusCode, null);
             }
             catch (Exception ex)
             {
@@ -123,7 +83,44 @@ namespace InformAppPlus.Servico
                 }
             }
 
-            return new ListaNotificacao();
+            return default;
         }
+
+        public static async Task<Tuple<HttpStatusCode, string>> SubirImagemAsync(string base64, CancellationToken tokenCancelamento = default) => await Device.InvokeOnMainThreadAsync(async () => 
+        {
+            try
+            {
+                var regexConteudoHtml = new Regex(@"<[^>]*?>");
+                var content = new StringContent(base64, Encoding.UTF8);
+                var resposta = await ClienteImagem.PostAsync("upload", content, tokenCancelamento).ConfigureAwait(false);
+                var conteudo = await resposta.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (resposta.IsSuccessStatusCode)
+                {
+                    var resultado = JsonConvert.DeserializeObject<ImgurResposta>(conteudo);
+
+                    return new Tuple<HttpStatusCode, string>(resposta.StatusCode, resultado?.Dados?.Link);
+                }
+                if (regexConteudoHtml.IsMatch(conteudo))
+                {
+                    var conteudoHtml = regexConteudoHtml.Replace(conteudo, string.Empty);
+
+                    return new Tuple<HttpStatusCode, string>(resposta.StatusCode, conteudoHtml);
+                }
+
+                await Principal.Mensagem(Requisicao.MensagemErroTratado(conteudo));
+
+                return new Tuple<HttpStatusCode, string>(resposta.StatusCode, null);
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(ex.Message))
+                {
+                    await Principal.Mensagem(ex.Message);
+                }
+            }
+
+            return default;
+        });
     }
 }

@@ -1,5 +1,6 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:utilidade="clr-namespace:InformAppPlus.Utilidade;assembly=InformAppPlus"
              x:Class="InformAppPlus.Controle.Pagina.CriarNotificacoes">
 
     <NavigationPage.TitleView>
@@ -12,126 +13,162 @@
             HorizontalOptions="CenterAndExpand" />
     </NavigationPage.TitleView>
 
-    <StackLayout
-        Margin="10, 10, 10, 10"
-        VerticalOptions="FillAndExpand"
-        HorizontalOptions="FillAndExpand">
+    <ScrollView>
+        <StackLayout
+            Margin="10, 10, 10, 10"
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand">
 
-        <Frame
-            Padding="10"
-            BackgroundColor="#e1e1e1"
-            CornerRadius="10">
-
-            <FlexLayout
-                Direction="Column">
-
-                <Label
-                    Text="Titulo">
-                </Label>
-                <Entry
-                    Text="{Binding TextoTitulo}"
-                    HorizontalOptions="FillAndExpand">
-                </Entry>
-            </FlexLayout>
-        </Frame>
-
-        <Frame
-            Padding="10"
-            BackgroundColor="#e1e1e1"
-            CornerRadius="10">
-
-            <FlexLayout
-                Direction="Column">
-
-                <Label
-                    Text="Mensagem">
-                </Label>
-                <Editor
-                    Text="{Binding TextoMensagem}"
-                    HeightRequest="120"
-                    VerticalOptions="FillAndExpand"
-                    HorizontalOptions="FillAndExpand">
-                </Editor>
-            </FlexLayout>
-        </Frame>
-
-        <FlexLayout
-            Direction="Row">
-
-            <Frame
-                Padding="10"
-                BackgroundColor="#e1e1e1"
-                CornerRadius="10">
-
+            <Frame>
                 <FlexLayout
-                    Direction="Column">
+                Direction="Column">
 
                     <Label
-                        Text="Agendar">
-                    </Label>
-                    <DatePicker
-                        Date="{Binding DataAgendada}"
-                        MinimumDate="{Binding DataAgendada}"
-                        Unfocused="DataHora_OnUnfocused">
-                    </DatePicker>
-                    <TimePicker
-                        Time="{Binding HoraAgendada}"
-                        Format="HH:mm"
-                        Unfocused="DataHora_OnUnfocused">
-                    </TimePicker>
+                        Text="Titulo"
+                        TextColor="Black"/>
+                    <Entry
+                        Text="{Binding TextoTitulo}"
+                        HorizontalOptions="FillAndExpand"/>
                 </FlexLayout>
             </Frame>
-            <Frame
-                Margin="6, 0, 0, 0"
-                Padding="10"
-                BackgroundColor="#e1e1e1"
-                CornerRadius="10">
 
+            <Frame>
                 <FlexLayout
                     Direction="Column">
 
                     <Label
-                        Text="Prioridade">
-                    </Label>
+                        Text="Mensagem"
+                        TextColor="Black"/>
+                    <Editor
+                        Text="{Binding TextoMensagem}"
+                        HeightRequest="120"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand"/>
+                </FlexLayout>
+            </Frame>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="215" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Frame
+                    Grid.Column="0">
 
                     <StackLayout
-                        Orientation="Horizontal">
+                        Orientation="Vertical">
 
-                        <Button
-                            Text="-"
-                            FontSize="24"
-                            WidthRequest="70"
-                            IsEnabled="{Binding BotaoSubtrairHabilitado}"
-                            Clicked="BotaoSubtrair_OnClicked">
-                        </Button>
-                        <Entry
-                            Text="{Binding Prioridade, StringFormat='{0:D2}'}"
-                            Keyboard="Numeric"
-                            VerticalTextAlignment="Center"
-                            HorizontalOptions="CenterAndExpand"
-                            Unfocused="Prioridade_OnUnfocused">
-                        </Entry>
-                        <Button
-                            Text="+"
-                            FontSize="18"
-                            WidthRequest="70"
-                            IsEnabled="{Binding BotaoSomarHabilitado}"
-                            Clicked="BotaoSomar_OnClicked">
-                        </Button>
+                        <Label
+                            Text="Agendar"
+                            TextColor="Black"/>
+                        <StackLayout
+                         Orientation="Horizontal">
+
+                            <DatePicker
+                                Date="{Binding DataAgendada}"
+                                MinimumDate="{Binding DataAgendada}"/>
+                            <TimePicker
+                                Time="{Binding HoraAgendada}"
+                                Format="HH:mm"
+                                Focused="Hora_OnFocused"
+                                Unfocused="Hora_OnUnfocused"
+                                PropertyChanged="Hora_OnPropertyChanged"/>
+                        </StackLayout>
                     </StackLayout>
+                </Frame>
+                <Frame
+                Grid.Column="1">
+
+                    <StackLayout
+                        Orientation="Horizontal"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="CenterAndExpand">
+
+                        <Label
+                            Text="Prioridade"
+                            TextColor="Black"
+                            VerticalTextAlignment="Center">
+
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Tapped="TapGestureRecognizer_OnTapped">
+                                </TapGestureRecognizer>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <CheckBox
+                            Scale="1.5"
+                            VerticalOptions="Start"
+                            Color="#afafaf"
+                            IsChecked="{Binding Prioridade}"/>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+
+            <Frame>
+
+                <FlexLayout
+                    Direction="Column">
+
+                    <Label
+                        Text="URL"
+                        TextColor="Black"/>
+                    <Entry
+                        Text="{Binding Url}"/>
                 </FlexLayout>
             </Frame>
-        </FlexLayout>
 
-        <Button
-            Margin="0, 20, 0, 0"
-            Text="Enviar"
-            CornerRadius="30"
-            WidthRequest="150"
-            BackgroundColor="#9696ff"
-            IsEnabled="{Binding BotaoEnviarHabilitado}"
-            HorizontalOptions="Center"
-            Clicked="Button_OnClicked">
-        </Button>
-    </StackLayout>
+            <Frame>
+
+                <StackLayout
+                    Orientation="Vertical">
+
+                    <Label
+                        Text="Imagem"
+                        TextColor="Black"
+                        HorizontalOptions="StartAndExpand"/>
+                    <Frame
+                        Margin="0, 10, 0, 0"
+                        IsVisible="{Binding ImagemEscolhida}"
+                        BackgroundColor="#afafaf">
+
+                        <StackLayout
+                            Orientation="Horizontal">
+
+                            <ActivityIndicator
+                                Color="#646464"
+                                HeightRequest="20"
+                                WidthRequest="20"
+                                IsVisible="{Binding CarregandoImagem}"
+                                IsRunning="{Binding CarregandoImagem}"
+                                HorizontalOptions="CenterAndExpand"/>
+                            <Image
+                                Aspect="AspectFill"
+                                Source="{Binding Imagem}"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"/>
+                        </StackLayout>
+                    </Frame>
+                    <Button
+                        Margin="0, 10, 0, 0"
+                        CornerRadius="30"
+                        BackgroundColor="{Binding CorBotaoImagem}"
+                        IsEnabled="{Binding BotaoImagemHabilitado}"
+                        Text="{Binding TextoBotaoImagem}"
+                        HorizontalOptions="Center"
+                        Clicked="EscolherImagem_OnClicked"/>
+                </StackLayout>
+            </Frame>
+
+            <Button
+                Margin="0, 20, 0, 10"
+                Text="Enviar"
+                CornerRadius="30"
+                WidthRequest="150"
+                BackgroundColor="#9696ff"
+                IsEnabled="{Binding BotaoEnviarHabilitado}"
+                HorizontalOptions="Center"
+                Clicked="Enviar_OnClicked"/>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

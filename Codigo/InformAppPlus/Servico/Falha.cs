@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace InformAppPlus
+namespace InformAppPlus.Servico
 {
     public class Falha
     {

@@ -59,20 +59,57 @@
                                     HorizontalOptions="FillAndExpand">
 
                                     <Label
-                                        Text="{Binding Titulo.Ingles, StringFormat='Titulo: {0}', FallbackValue='Titulo: sem valor', TargetNullValue='Titulo: sem valor'}"
+                                        Text="tsteee"
                                         BindingContext="{Binding .}">
+
+                                        <!--<Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    Text="Titulo: "
+                                                    TextColor="Black"/>
+                                                <Span
+                                                    Text="{Binding Titulo.Ingles, FallbackValue='sem valor', TargetNullValue='sem valor'}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>-->
                                     </Label>
                                     <Label
-                                        Text="{Binding Mensagem.Ingles, StringFormat='Mensagem: {0}', FallbackValue='Mensagem: sem valor', TargetNullValue='Mensagem: sem valor'}"
                                         BindingContext="{Binding .}">
+
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    Text="Mensagem: "
+                                                    TextColor="Black"/>
+                                                <Span
+                                                    Text="{Binding Mensagem.Ingles, FallbackValue='sem valor', TargetNullValue='sem valor'}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
                                     </Label>
                                     <Label
-                                        Text="{Binding DataHoraAgendado, StringFormat='Data Agendada: {0}', FallbackValue='Data Agendada: sem valor', TargetNullValue='Data Agendada: sem valor'}"
                                         BindingContext="{Binding .}">
+
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    Text="Data Agendada: "
+                                                    TextColor="Black"/>
+                                                <Span
+                                                    Text="{Binding DataHoraAgendado, FallbackValue='sem valor', TargetNullValue='sem valor'}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
                                     </Label>
                                     <Label
-                                        Text="{Binding Prioridade, StringFormat='Prioridade: {0}', FallbackValue='Prioridade: sem valor', TargetNullValue='Prioridade: sem valor'}"
                                         BindingContext="{Binding .}">
+
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    Text="Prioridade: "
+                                                    TextColor="Black"/>
+                                                <Span
+                                                    Text="{Binding Prioridade, FallbackValue='sem valor', TargetNullValue='sem valor'}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
                                     </Label>
                                 </FlexLayout>
                             </Frame>

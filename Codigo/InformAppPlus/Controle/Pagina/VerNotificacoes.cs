@@ -1,7 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using InformAppPlus.Modelo;
 using InformAppPlus.Servico;
+using InformAppPlus.Utilidade;
 using Xamarin.Forms;
 
 namespace InformAppPlus.Controle.Pagina
@@ -37,9 +39,16 @@ namespace InformAppPlus.Controle.Pagina
 
                 var resultadoChamada = await Conexao.VerNotificacoesAsync(TokenCancelamento);
 
-                Carregando = false;
+                if (resultadoChamada?.Item1.HttpStatusCodeSuccess() ?? false)
+                {
+                    Carregando = false;
 
-                ListaNotificacao = new ObservableCollection<Notificacao>(resultadoChamada.Notificacoes);
+                    ListaNotificacao = new ObservableCollection<Notificacao>(resultadoChamada.Item2?.Notificacoes ?? new List<Notificacao>());
+                }
+                else
+                {
+                    await Principal.Mensagem($"Não foi possível listar as notificações porque a requisição retornou: {resultadoChamada?.Item1.ValorTratado()}");
+                }
             };
 
             Disappearing += delegate
